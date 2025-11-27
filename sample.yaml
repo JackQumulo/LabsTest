@@ -1,0 +1,18 @@
+version: 5
+
+services:
+  - name: web
+    port: 8080
+    enabled: true
+  - name: db
+    port: 5432
+    enabled: true
+  - name: cache
+    port: 6379
+    enabled: false
+  - name: worker
+    concurrency: 4
+    enabled: true
+  - name: metrics
+    port: 9100
+    enabled: true
