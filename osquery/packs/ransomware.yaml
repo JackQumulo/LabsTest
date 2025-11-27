@@ -1,0 +1,15 @@
+packs:
+  ransomware:
+    queries:
+      find_suspicious_extensions:
+        query: "SELECT path, directory FROM file WHERE path LIKE '%.encrypted' OR path LIKE '%.crypt' OR path LIKE '%.locked' OR path LIKE '%.enc' LIMIT 100;"
+        description: "Find files with extensions commonly used by ransomware payloads"
+        interval: 3600
+      suspicious_shadowcopy_activity:
+        query: "SELECT name, state FROM services WHERE name LIKE '%vss%' OR name LIKE '%shadow%'" 
+        description: "Check shadow copy / VSS related services status"
+        interval: 300
+      recent_ransomware_processes:
+        query: "SELECT pid, name, path, cmdline, uid, gid, start_time FROM processes WHERE name LIKE '%crypt%' OR name LIKE '%lock%' OR cmdline LIKE '%encrypt%' LIMIT 50;"
+        description: "Processes with names or command lines associated with encryption activity"
+        interval: 300

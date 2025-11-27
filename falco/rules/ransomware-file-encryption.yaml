@@ -1,0 +1,6 @@
+- rule: Ransomware suspicious file encryption
+desc: Detect large numbers of files being opened for writing or truncated by the same process, and common ransomware tool usage
+condition: (evt.type in (open, creat, openat) and (evt.flags contains O_TRUNC or evt.flags contains O_WRONLY)) or (proc.name in ("vssadmin","wbadmin","powershell" ) and evt.args contains "delete shadows")
+output: "%user %container.info %proc.name is writing/truncating many files (possible ransomware) %fd.name"
+priority: WARNING
+tags: [ransomware, filesystem, integrity]

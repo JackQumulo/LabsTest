@@ -1,0 +1,35 @@
+title: Ransomware - Mass File Encryption
+id: 1f2e3d4c-5b6a-7890-abcd-1234567890ab
+description: Detects processes performing mass file write/rename actions and creation of suspicious encrypted file extensions.
+status: experimental
+author: Copilot
+date: 2025/11/27
+references:
+  - https://github.com/Neo23x0/sigma
+tags:
+  - ransomware
+  - attack.execution
+  - attack.impact
+logsource:
+  product: windows
+  service: sysmon
+  category: file_event
+detection:
+  selection:
+    EventID: [11, 15]
+    FileName|endswith:
+      - ".encrypted"
+      - ".crypt"
+      - ".lock"
+      - ".locked"
+      - ".enc"
+  suspicious_processes:
+    CommandLine|contains:
+      - "vssadmin"
+      - "wbadmin"
+      - "bcdedit"
+      - "cipher"
+  condition: selection or (suspicious_processes and EventID: 1)
+falsepositives:
+  - legitimate backup or disk utilities
+level: high

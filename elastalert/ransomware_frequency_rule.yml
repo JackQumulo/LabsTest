@@ -1,0 +1,18 @@
+name: Ransomware - Frequent file encryption events
+type: frequency
+index: filebeat-* 
+num_events: 50
+timeframe:
+  minutes: 5
+filter:
+- term:
+    event.action: "file_rename"
+- terms:
+    file.extension:
+      - "encrypted"
+      - "crypt"
+      - "locked"
+alert:
+- "email"
+alert_subject: "[ALERT] Possible ransomware activity detected"
+alert_text: "Detected {num_events} file events with suspicious extensions in the last {timeframe}. Investigate process context and source host."
